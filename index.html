@@ -1,1 +1,28 @@
-TEST
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Text Button</title>
+</head>
+<body>
+  <p id="text">Text 1</p>
+  <button id="nextButton">Press</button>
+
+  <script>
+    const texts = [
+      "Text 1",
+      "Text 2",
+      "Text 3",
+      "Text 4"
+    ];
+
+    let index = 0;
+
+    document.getElementById("nextButton").addEventListener("click", () => {
+      index = (index + 1) % texts.length;
+      document.getElementById("text").textContent = texts[index];
+    });
+  </script>
+</body>
+</html>
