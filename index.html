@@ -3,11 +3,108 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Text Button</title>
+  <title>Text Switcher</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #dbeafe);
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      border-radius: 20px;
+      padding: 32px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.8rem;
+      color: #111827;
+    }
+
+    p.subtitle {
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: #6b7280;
+      font-size: 1rem;
+    }
+
+    #text {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 24px;
+      min-height: 2.5em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 14px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      width: 100%;
+      max-width: 220px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px 18px;
+        border-radius: 16px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      #text {
+        font-size: 1.2rem;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-  <p id="text">Text 1</p>
-  <button id="nextButton">Press</button>
+  <div class="card">
+    <h1>Simple Text Switcher</h1>
+    <p class="subtitle">Press the button to see the next text.</p>
+    <div id="text">Text 1</div>
+    <button id="nextButton">Press</button>
+  </div>
 
   <script>
     const texts = [
