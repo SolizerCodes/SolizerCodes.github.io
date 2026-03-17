@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hallo Temp</title>
+<title>Hallo Elli</title>
 
 <style>
 
@@ -74,7 +74,12 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
   background: #00ff88;
   color: black;
 }
@@ -95,15 +100,11 @@ const texts = [
   "Hallo Elli.",
   "Ich wusste nicht, wie ich dir schreiben sollte.",
   "Deshalb habe ich mir gedacht, ich mache, was ein Informatiker machen würde.",
-  "Test 1",
-  "Test 2",
-  "Test 3",
-  "Test 4",
-  "Test 5",
   "Also hier sind wir."
 ];
 
 let index = 0;
+let isTyping = false;
 
 const textElement = document.getElementById("text");
 const button = document.getElementById("nextButton");
@@ -112,13 +113,17 @@ function typeText(text, i = 0) {
 
   if (i === 0) {
     textElement.innerHTML = "";
+    isTyping = true;
+    button.disabled = true;
   }
 
   if (i < text.length) {
     textElement.innerHTML = text.substring(0, i + 1) + '<span class="cursor">|</span>';
-    setTimeout(() => typeText(text, i + 1), 10);
+    setTimeout(() => typeText(text, i + 1), 40);
   } else {
     textElement.innerHTML = text + '<span class="cursor">|</span>';
+    isTyping = false;
+    button.disabled = false;
   }
 
 }
@@ -139,10 +144,15 @@ function showText() {
 showText();
 
 button.addEventListener("click", () => {
+
+  if (isTyping) return;
+
   index++;
+
   if (index < texts.length) {
     showText();
   }
+
 });
 
 </script>
