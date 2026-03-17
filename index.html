@@ -117,15 +117,29 @@
   const textElement = document.getElementById("text");
   const button = document.getElementById("nextButton");
 
-  button.addEventListener("click", () => {
-    index++;
-
-    if (index < texts.length) {
-      textElement.textContent = texts[index];
+  function typeText(text, i = 0) {
+    if (i < text.length) {
+      textElement.textContent += text.charAt(i);
+      setTimeout(() => typeText(text, i + 1), 40);
     }
+  }
+
+  function showText() {
+    textElement.textContent = "";
+    typeText(texts[index]);
 
     if (index === texts.length - 1) {
       button.style.display = "none";
+    }
+  }
+
+  // show first text on load
+  showText();
+
+  button.addEventListener("click", () => {
+    index++;
+    if (index < texts.length) {
+      showText();
     }
   });
   </script>
