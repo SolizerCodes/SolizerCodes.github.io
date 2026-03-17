@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hallo Elli</title>
+<title>Hallo Temp</title>
 
 <style>
 
@@ -116,7 +116,7 @@ function typeText(text, i = 0) {
 
   if (i < text.length) {
     textElement.innerHTML = text.substring(0, i + 1) + '<span class="cursor">|</span>';
-    setTimeout(() => typeText(text, i + 1), 20);
+    setTimeout(() => typeText(text, i + 1), 10);
   } else {
     textElement.innerHTML = text + '<span class="cursor">|</span>';
   }
