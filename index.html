@@ -135,6 +135,13 @@ button.addEventListener("click", () => {
   }
 });
 
+const message = document.createElement("div");
+message.className = "message left";
+
+if (index === texts.length - 1) {
+  message.classList.add("final");
+}
+
 </script>
 
 </body>
