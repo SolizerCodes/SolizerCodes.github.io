@@ -28,6 +28,21 @@ body {
   max-width: 90%;
 }
 
+.final {
+  border: 2px solid #00ff88;
+  background: rgba(0, 255, 136, 0.12);
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-shadow: 0 0 12px #00ff88;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 5px #00ff88; }
+  50% { box-shadow: 0 0 18px #00ff88; }
+  100% { box-shadow: 0 0 5px #00ff88; }
+}
+
 #text {
   font-size: 1.4rem;
   line-height: 1.6;
