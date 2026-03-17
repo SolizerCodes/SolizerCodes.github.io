@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hallo Temp</title>
+<title>Hallo Elli</title>
 
 <style>
 
@@ -28,9 +28,18 @@ body {
   max-width: 90%;
 }
 
+#text {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  min-height: 80px;
+  text-shadow: 0 0 6px #00ff88;
+}
+
+/* FINAL MESSAGE STYLE */
 .final {
   border: 2px solid #00ff88;
   background: rgba(0, 255, 136, 0.12);
+  padding: 18px;
   font-size: 1.6rem;
   font-weight: bold;
   text-shadow: 0 0 12px #00ff88;
@@ -41,13 +50,6 @@ body {
   0% { box-shadow: 0 0 5px #00ff88; }
   50% { box-shadow: 0 0 18px #00ff88; }
   100% { box-shadow: 0 0 5px #00ff88; }
-}
-
-#text {
-  font-size: 1.4rem;
-  line-height: 1.6;
-  min-height: 80px;
-  text-shadow: 0 0 6px #00ff88;
 }
 
 .cursor {
@@ -118,11 +120,14 @@ function typeText(text, i = 0) {
 
 function showText() {
 
-  typeText(texts[index]);
-
   if (index === texts.length - 1) {
+    textElement.classList.add("final");
     button.style.display = "none";
+  } else {
+    textElement.classList.remove("final");
   }
+
+  typeText(texts[index]);
 
 }
 
@@ -134,13 +139,6 @@ button.addEventListener("click", () => {
     showText();
   }
 });
-
-const message = document.createElement("div");
-message.className = "message left";
-
-if (index === texts.length - 1) {
-  message.classList.add("final");
-}
 
 </script>
 
