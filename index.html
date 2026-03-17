@@ -12,84 +12,86 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: #000;
-      color: #00ff88;
-      font-family: "Courier New", monospace;
       display: flex;
+      align-items: center;
       justify-content: center;
-      padding: 40px 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #000, #ffffff);
+      padding: 20px;
     }
 
-    #container {
+    .card {
       width: 100%;
-      max-width: 750px;
+      max-width: 500px;
+      background: white;
+      border-radius: 20px;
+      padding: 32px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.8rem;
+      color: #111827;
+    }
+
+    p.subtitle {
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: #6b7280;
+      font-size: 1rem;
+    }
+
+    #text {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: white;
+      width: 500px;
+      height: 120px;
+      margin-bottom: 24px;
       display: flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    #chat {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      width: 100%;
-    }
-
-    .message {
-      max-width: 85%;
-      padding: 14px 18px;
-      border: 1px solid #00ff88;
-      color: #00ff88;
-      background: rgba(0, 255, 136, 0.04);
-      text-shadow: 0 0 6px #00ff88;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .message.left {
-      align-self: flex-start;
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    #controls {
-      margin-top: 24px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
     button {
-      background: transparent;
-      border: 1px solid #00ff88;
-      color: #00ff88;
-      font-family: "Courier New", monospace;
+      border: none;
+      background: #2563eb;
+      color: white;
       font-size: 1rem;
-      padding: 10px 18px;
+      font-weight: bold;
+      padding: 14px 24px;
+      border-radius: 12px;
       cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      width: 100%;
+      max-width: 220px;
     }
 
     button:hover {
-      background: #00ff88;
-      color: #000;
+      background: #1d4ed8;
+      transform: translateY(-1px);
     }
 
-    @media (max-width: 600px) {
-      body {
-        padding: 24px 14px;
+    button:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px 18px;
+        border-radius: 16px;
       }
 
-      .message {
-        max-width: 100%;
-        font-size: 1rem;
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      #text {
+        font-size: 1.2rem;
       }
 
       button {
@@ -99,63 +101,31 @@
   </style>
 </head>
 <body>
-  <div id="container">
-    <div id="chat"></div>
-
-    <div id="controls">
-      <button id="nextButton">Press</button>
-    </div>
+  <div class="card">
+    <div id="text"></div>
+    <button id="nextButton">Press</button>
   </div>
 
   <script>
-    const texts = [
-      "Hallo Elli.",
-      "Ich wusste nicht, wie ich dir schreiben sollte.",
-      "Deshalb habe ich mir gedacht, ich mache, was ein Informatiker machen würde.",
-      "Also hier sind wir."
-    ];
+  const texts = [
+    "Hallo Elli.",
+    "Ich wusste nicht, wie ich dir schreiben sollte.",
+    "Deshalb habe ich mir gedacht, ich mache, was ein Informatiker machen würde.",
+    "Also hier sind wir."
+  ];
 
-    let index = 0;
-    let isTyping = false;
+  let index = 0;
 
-    const chat = document.getElementById("chat");
-    const button = document.getElementById("nextButton");
+  const textElement = document.getElementById("text");
+  const button = document.getElementById("nextButton");
 
-    function typeMessage(element, text, i = 0) {
-      if (i < text.length) {
-        element.innerHTML = text.substring(0, i + 1) + '<span class="cursor">|</span>';
-        setTimeout(() => typeMessage(element, text, i + 1), 40);
-      } else {
-        element.textContent = text;
-        isTyping = false;
-
-        if (index === texts.length - 1) {
-          button.style.display = "none";
-        }
-      }
+  function typeText(text, i = 0) {
+    if (i < text.length) {
+      textElement.textContent += text.charAt(i);
+      setTimeout(() => typeText(text, i + 1), 40);
     }
+  }
 
-    function addMessage() {
-      if (isTyping || index >= texts.length) return;
-
-      isTyping = true;
-
-      const message = document.createElement("div");
-      message.className = "message left";
-      chat.appendChild(message);
-
-      typeMessage(message, texts[index]);
-      index++;
-
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth"
-      });
-    }
-
-    addMessage();
-
-    button.addEventListener("click", addMessage);
-  </script>
-</body>
-</html>
+  function showText() {
+    textElement.textContent = "";
+    typeText(texts[index]);
