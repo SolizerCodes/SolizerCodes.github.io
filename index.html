@@ -132,7 +132,7 @@ function typeText(text, i = 0) {
 
   if (i < text.length) {
     textElement.innerHTML = text.substring(0, i + 1) + '<span class="cursor">|</span>';
-    setTimeout(() => typeText(text, i + 1), 40);
+    setTimeout(() => typeText(text, i + 1), 20);
   } else {
     textElement.innerHTML = text + '<span class="cursor">|</span>';
     isTyping = false;
