@@ -152,7 +152,12 @@ function typeText(text, i = 0) {
 }
 
 function showText() {
-  textElement.classList.remove("final");
+  if (index === texts.length - 1) {
+    textElement.classList.add("final");
+  } else {
+    textElement.classList.remove("final");
+  }
+
   typeText(texts[index]);
 }
 
