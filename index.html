@@ -133,7 +133,6 @@ function typeText(text, i = 0) {
 
     if (index === texts.length - 1) {
       textElement.classList.add("final");
-      button.style.display = "none";
     }
   }
 }
@@ -141,8 +140,10 @@ function typeText(text, i = 0) {
 function showText() {
   if (index === texts.length - 1) {
     textElement.classList.add("final");
+    button.style.display = "none";
   } else {
     textElement.classList.remove("final");
+    button.style.display = "inline-block";
   }
 
   typeText(texts[index]);
