@@ -116,7 +116,6 @@ const textElement = document.getElementById("text");
 const button = document.getElementById("nextButton");
 
 function typeText(text, i = 0) {
-
   if (i === 0) {
     textElement.innerHTML = "";
     isTyping = true;
@@ -124,16 +123,16 @@ function typeText(text, i = 0) {
   }
 
   if (i < text.length) {
-    textElement.innerHTML = text.substring(0, i + 1) + '<span class="cursor">|</span>';
+    textElement.innerHTML =
+      text.substring(0, i + 1) + '<span class="cursor">|</span>';
+
     setTimeout(() => typeText(text, i + 1), 20);
   } else {
-    textElement.innerHTML = text + '<span class="cursor">|</span>';
+    textElement.innerHTML =
+      text + '<span class="cursor">|</span>';
+
     isTyping = false;
     button.disabled = false;
-
-    if (index === texts.length - 1) {
-      textElement.classList.add("final");
-    }
   }
 }
 
