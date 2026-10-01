@@ -1,7 +1,16 @@
+@font-face {
+  font-family: "Cabin"; font-style: normal; font-weight: 400 700; font-stretch: 75% 100%; font-display: block;
+  src: url("../fonts/cabin-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cabin"; font-style: italic; font-weight: 400 700; font-stretch: 75% 100%; font-display: block;
+  src: url("../fonts/cabin-italic.woff2") format("woff2");
+}
+
 /* Colours from the HSG palette. */
 :root {
-  --bg: #ffffff;
-  --surface: #e7ede8;
+  --bg: #e7ede8;
+  --surface: #ffffff;
   --border: #cbd8cd;
   --text: #1b1f1c;
   --muted: #525252;
@@ -15,8 +24,8 @@
   --chrome: 250px;
   /* Width: 78% of the screen on phones, never wider than 420px (so ultrawide screens stay calm),
      and never so wide that the tile would not fit the height. Height keeps a 1:1.35 ratio. */
-  --tile-w: max(150px, min(78vw, 420px, calc((100dvh - var(--chrome)) / 1.35)));
-  --tile-h: calc(var(--tile-w) * 1.35);
+  --tile-w: max(150px, min(78vw, 420px, calc((100dvh - var(--chrome)) / 1.3867)));
+  --tile-h: calc(var(--tile-w) * 1.3867);   /* same shape as the card slides */
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -53,7 +62,13 @@ body {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
   padding: 14px 16px; border-bottom: 3px solid var(--primary);
 }
-.top h1 { margin: 0; font-size: 1.15rem; color: var(--primary); font-weight: 600; }
+.top h1 { margin: 0; line-height: 0; }
+.logo {
+  display: block; width: 40px; height: 44px; background: var(--primary);
+  -webkit-mask: url("../img/hsg-mark.webp") center / contain no-repeat;
+  mask: url("../img/hsg-mark.webp") center / contain no-repeat;
+}
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 .theme { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
 .theme button {
@@ -99,14 +114,14 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: center; 
 .tile.flipped .front { transform: rotateY(-180deg); }
 .tile.flipped .back { transform: rotateY(0); }
 
-.front img { width: 100%; flex: 1 1 auto; min-height: 0; object-fit: cover; display: block; }
+.front:not(.slide) img { width: 100%; flex: 1 1 auto; min-height: 0; object-fit: cover; display: block; }
 .front-text { padding: 14px 16px 18px; }
 .front-text h2 { margin: 0; font-size: 1.25rem; color: var(--primary); }
 .front-text h2, .front-text p { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
 .front-text h2 { -webkit-line-clamp: 2; line-clamp: 2; }
 .front-text p { -webkit-line-clamp: 2; line-clamp: 2; }
 .front-text p { margin: 4px 0 0; color: var(--muted); }
-.front:not(:has(img)) { justify-content: center; text-align: center; }
+.front:not(.slide):not(:has(img)) { justify-content: center; text-align: center; }
 
 .back-inner { user-select: text; -webkit-user-select: text; cursor: auto; height: 100%; overflow-y: auto; padding: 20px 20px 36px; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.5) transparent; }
 .back-inner h2 { margin: 0 0 8px; font-size: 1.25rem; }
@@ -160,4 +175,19 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: center; 
   main { padding: 0 0 6px; }
   .track { padding-top: 10px; padding-bottom: 10px; }
   .count { display: none; }
+}
+
+/* Card faces generated from the slides (tools/pdf_to_tiles.py). Everything inside is positioned in
+   percent of the face and sized in cqw, so the layout scales exactly with the tile. Cards keep their
+   own colours in light and dark mode. */
+.face.slide {
+  container-type: inline-size; display: block; background: #fff; color: #000; border: 0;
+  font-family: "Cabin", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+}
+.slide svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.slide img { position: absolute; display: block; pointer-events: none; }
+.slide p { margin: 0; }
+.slide span {
+  position: absolute; white-space: pre; line-height: 1; font-kerning: none;
+  -webkit-user-select: text; user-select: text; cursor: text;
 }

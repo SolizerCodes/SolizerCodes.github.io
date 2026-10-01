@@ -168,7 +168,7 @@
                inner.scrollTop + inner.clientHeight < inner.scrollHeight - 2;
     inner.parentNode.classList.toggle("more", more);
   }
-  var inners = tiles.map(function (t) { return t.querySelector(".back-inner"); });
+  var inners = tiles.map(function (t) { return t.querySelector(".back-inner"); }).filter(Boolean);
   function updateAllMore() { inners.forEach(updateMore); }
   inners.forEach(function (el) {
     el.addEventListener("scroll", function () { updateMore(el); }, { passive: true });

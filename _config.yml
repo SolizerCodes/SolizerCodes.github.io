@@ -9,3 +9,4 @@ exclude:
   - README.md
   - Gemfile
   - Gemfile.lock
+  - tools

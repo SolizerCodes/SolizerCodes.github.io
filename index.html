@@ -19,7 +19,7 @@
 </head>
 <body>
   <header class="top">
-    <h1>{{ site.title }}</h1>
+    <h1><span class="logo" role="img" aria-label="University of St.Gallen"></span><span class="sr-only">{{ site.title }}</span></h1>
     <div class="theme" role="group" aria-label="Colour theme">
       <button type="button" data-theme-choice="auto">Auto</button>
       <button type="button" data-theme-choice="light">Light</button>
@@ -42,7 +42,12 @@
 
       <div class="track" id="track" tabindex="-1">
         {% for tile in tiles %}
-        <article class="tile" role="button" tabindex="0" aria-pressed="false">
+        <article class="tile" role="button" tabindex="0" aria-pressed="false" aria-label="{{ tile.title | escape }}">
+          {% if tile.slide %}
+          {% assign parts = tile.content | split: "<!--back-->" %}
+          <div class="face front slide">{{ parts[0] }}</div>
+          <div class="face back slide">{{ parts[1] }}</div>
+          {% else %}
           <div class="face front">
             {% if tile.image %}
             <img src="{{ tile.image | relative_url }}" alt="{{ tile.image_alt | default: '' }}" loading="lazy" draggable="false">
@@ -58,6 +63,7 @@
               {{ tile.content | markdownify }}
             </div>
           </div>
+          {% endif %}
         </article>
         {% endfor %}
       </div>
