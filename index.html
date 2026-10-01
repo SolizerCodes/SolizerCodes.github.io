@@ -15,7 +15,7 @@
       if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
 <body>
   <header class="top">
@@ -72,6 +72,6 @@
     {% endif %}
   </main>
 
-  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/main.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 </body>
 </html>
