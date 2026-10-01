@@ -1,5 +1,7 @@
-title: Tile Selection
-description: Swipe through the tiles and tap one to see its back.
+title: St. Gallen AI Bootcamp
+description: Eight AI patterns, from Act to Forecast. Swipe through the cards and flip each one to see its trigger question and examples.
+url: https://solizercodes.github.io
+lang: en
 
 collections:
   tiles:
