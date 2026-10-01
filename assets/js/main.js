@@ -150,8 +150,14 @@
       if (i !== current) { goTo(i); return; }   /* side tile: bring to front first */
       flipCurrent();
     }
+    var downX = 0, downY = 0;
+    tile.addEventListener("pointerdown", function (e) { downX = e.clientX; downY = e.clientY; });
     tile.addEventListener("click", function (e) {
       if (e.target.closest("a")) return;   /* links on the back keep working */
+      /* Selecting text (mouse dragged, or text now selected) must not count as a flip click. */
+      if (Math.abs(e.clientX - downX) > 5 || Math.abs(e.clientY - downY) > 5) return;
+      var sel = window.getSelection();
+      if (sel && !sel.isCollapsed && tile.contains(sel.anchorNode)) return;
       toggle();
     });
   });

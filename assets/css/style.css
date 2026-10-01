@@ -108,7 +108,7 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: center; 
 .front-text p { margin: 4px 0 0; color: var(--muted); }
 .front:not(:has(img)) { justify-content: center; text-align: center; }
 
-.back-inner { height: 100%; overflow-y: auto; padding: 20px 20px 36px; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.5) transparent; }
+.back-inner { user-select: text; -webkit-user-select: text; cursor: auto; height: 100%; overflow-y: auto; padding: 20px 20px 36px; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.5) transparent; }
 .back-inner h2 { margin: 0 0 8px; font-size: 1.25rem; }
 .back-inner a { color: inherit; text-decoration: underline; }
 .back-inner img { max-width: 100%; border-radius: 8px; }
