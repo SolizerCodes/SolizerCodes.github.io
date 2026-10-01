@@ -71,12 +71,13 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: center; 
 .carousel { position: relative; width: 100%; max-width: 1000px; margin: 0 auto; overflow: hidden; }
 .track {
   display: flex; gap: 0; overflow-x: auto;
-  scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
   padding: 24px calc(50% - var(--tile-w) / 2);
   scrollbar-width: none; position: relative;
 }
 .track::-webkit-scrollbar { display: none; }
+.track.animating { scroll-snap-type: none; }
 
 .tile {
   flex: 0 0 var(--tile-w); height: var(--tile-h);
@@ -137,7 +138,6 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: center; 
 
 @media (prefers-reduced-motion: reduce) {
   .face { transition: none; }
-  .track { scroll-behavior: auto; }
 }
 
 /* Back side: fade and arrow at the bottom while there is more text to scroll to. */

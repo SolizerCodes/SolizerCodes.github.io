@@ -45,18 +45,37 @@
     return d;
   });
 
-  /* While a smooth scroll runs, `current` lags behind; rapid key presses build on the target. */
-  var target = 0, animTimer = null;
-  function base() { return animTimer ? target : current; }
+  /* Own scroll animation (browser smooth-scroll drops or ignores targets when clicked repeatedly).
+     While it runs, `current` lags behind, so rapid clicks build on `target`. */
+  var target = 0, raf = null;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  function base() { return raf ? target : current; }
 
-  function goTo(i) {
+  function stopAnim() {
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+    track.classList.remove("animating");
+  }
+
+  function goTo(i, instant) {
     i = Math.max(0, Math.min(tiles.length - 1, i));   /* clamped: no wrap-around */
     target = i;
-    clearTimeout(animTimer);
-    animTimer = setTimeout(function () { animTimer = null; }, 700);
     var t = tiles[i];
-    track.scrollTo({ left: t.offsetLeft + t.offsetWidth / 2 - track.clientWidth / 2 });
+    var to = t.offsetLeft + t.offsetWidth / 2 - track.clientWidth / 2;
+    stopAnim();
+    if (instant || reduceMotion.matches) { track.scrollLeft = to; return; }
+    var from = track.scrollLeft, start = performance.now(), dur = 380;
+    track.classList.add("animating");   /* switches scroll-snap off while we drive the scroll */
+    raf = requestAnimationFrame(function step(now) {
+      var p = Math.min(1, (now - start) / dur);
+      track.scrollLeft = from + (to - from) * (1 - Math.pow(1 - p, 3));   /* ease-out */
+      if (p < 1) { raf = requestAnimationFrame(step); } else { stopAnim(); }
+    });
   }
+  /* The user grabs the carousel: stop animating and let the browser take over. */
+  ["touchstart", "wheel", "pointerdown"].forEach(function (ev) {
+    track.addEventListener(ev, stopAnim, { passive: true });
+  });
 
   function update() {
     var mid = track.scrollLeft + track.clientWidth / 2, best = 0, bestDist = Infinity;
@@ -68,8 +87,8 @@
       /* Depth effect: the further from the centre, the smaller, fainter and blurrier. */
       var a = Math.min(d / (t.offsetWidth * 0.65), 2);
       t.style.transform = "scale(" + (1 - 0.1 * a).toFixed(3) + ")";
-      t.style.filter = a < 0.05 ? "none" : "blur(" + (a * 2).toFixed(2) + "px)";
-      t.style.opacity = (1 - 0.15 * a).toFixed(3);
+      /* No opacity here: a see-through tile shows the tile behind it as a pale ghost. Dim instead. */
+      t.style.filter = a < 0.05 ? "none" : "blur(" + (a * 2).toFixed(2) + "px) brightness(" + (1 - 0.1 * a).toFixed(3) + ")";
       t.style.zIndex = String(100 - Math.round(a * 20));
 
       /* Flip back as soon as the tile is scrolled away from. */
@@ -91,7 +110,7 @@
     ticking = true;
     requestAnimationFrame(function () { ticking = false; update(); });
   }, { passive: true });
-  window.addEventListener("resize", function () { goTo(current); update(); });
+  window.addEventListener("resize", function () { goTo(current, true); update(); });
 
   prev.addEventListener("click", function () { goTo(base() - 1); });
   next.addEventListener("click", function () { goTo(base() + 1); });
