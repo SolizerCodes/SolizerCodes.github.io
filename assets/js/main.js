@@ -45,8 +45,15 @@
     return d;
   });
 
+  /* While a smooth scroll runs, `current` lags behind; rapid key presses build on the target. */
+  var target = 0, animTimer = null;
+  function base() { return animTimer ? target : current; }
+
   function goTo(i) {
     i = Math.max(0, Math.min(tiles.length - 1, i));   /* clamped: no wrap-around */
+    target = i;
+    clearTimeout(animTimer);
+    animTimer = setTimeout(function () { animTimer = null; }, 700);
     var t = tiles[i];
     track.scrollTo({ left: t.offsetLeft + t.offsetWidth / 2 - track.clientWidth / 2 });
   }
@@ -69,6 +76,7 @@
       if (a > 0.25 && t.classList.contains("flipped")) setFlipped(t, false);
     });
     current = best;
+    tiles.forEach(function (t, i) { t.tabIndex = i === current ? 0 : -1; });
     prev.disabled = current === 0;
     next.disabled = current === tiles.length - 1;
     countEl.textContent = (current + 1) + " / " + tiles.length;
@@ -85,37 +93,47 @@
   }, { passive: true });
   window.addEventListener("resize", function () { goTo(current); update(); });
 
-  prev.addEventListener("click", function () { goTo(current - 1); });
-  next.addEventListener("click", function () { goTo(current + 1); });
+  prev.addEventListener("click", function () { goTo(base() - 1); });
+  next.addEventListener("click", function () { goTo(base() + 1); });
 
   document.addEventListener("keydown", function (e) {
     if (e.target.closest && e.target.closest("input, textarea, select")) return;
-    if (e.key === "ArrowLeft") { e.preventDefault(); goTo(current - 1); }
-    else if (e.key === "ArrowRight") { e.preventDefault(); goTo(current + 1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); goTo(base() - 1); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); goTo(base() + 1); }
   });
 
   /* ---------- Flip ---------- */
+  /* Enter / Space always flips the centred tile, wherever keyboard focus happens to be. */
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var t = e.target;
+    var onTile = t.classList && t.classList.contains("tile");
+    if (t !== document.body && !onTile) return;   /* buttons, links etc. keep their own behaviour */
+    e.preventDefault();
+    flipCurrent();
+  });
+
   function setFlipped(tile, on) {
     tile.classList.toggle("flipped", on);
     tile.setAttribute("aria-pressed", String(on));
     tile.querySelector(".front").setAttribute("aria-hidden", String(on));
     tile.querySelector(".back").setAttribute("aria-hidden", String(!on));
   }
+  function flipCurrent() {
+    var tile = tiles[current];
+    var on = !tile.classList.contains("flipped");
+    tiles.forEach(function (t) { if (t !== tile) setFlipped(t, false); });
+    setFlipped(tile, on);
+  }
   tiles.forEach(function (tile, i) {
     setFlipped(tile, false);
     function toggle() {
       if (i !== current) { goTo(i); return; }   /* side tile: bring to front first */
-      var on = !tile.classList.contains("flipped");
-      tiles.forEach(function (t) { if (t !== tile) setFlipped(t, false); });
-      setFlipped(tile, on);
+      flipCurrent();
     }
     tile.addEventListener("click", function (e) {
       if (e.target.closest("a")) return;   /* links on the back keep working */
       toggle();
-    });
-    tile.addEventListener("keydown", function (e) {
-      if (e.target !== tile) return;
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
     });
   });
 

@@ -28,7 +28,10 @@
   </header>
 
   <main>
-    <p class="hint">Swipe or use the arrows. Tap a tile to flip it.</p>
+    <p class="hint">
+      <span class="touch">Swipe left or right to browse. Tap the tile in the middle to flip it.</span>
+      <span class="mouse">Use the arrow buttons or the &larr; &rarr; keys to browse. Click the tile in the middle to flip it.</span>
+    </p>
 
     {% assign tiles = site.tiles | sort: "path" %}
     {% if tiles.size == 0 %}
