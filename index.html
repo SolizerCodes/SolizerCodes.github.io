@@ -1,0 +1,74 @@
+---
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{ site.title }}</title>
+  <meta name="description" content="{{ site.description }}">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    /* Apply a saved theme before first paint. No saved value = follow the system. */
+    try {
+      var t = localStorage.getItem("theme");
+      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+  <header class="top">
+    <h1>{{ site.title }}</h1>
+    <div class="theme" role="group" aria-label="Colour theme">
+      <button type="button" data-theme-choice="auto">Auto</button>
+      <button type="button" data-theme-choice="light">Light</button>
+      <button type="button" data-theme-choice="dark">Dark</button>
+    </div>
+  </header>
+
+  <main>
+    <p class="hint">Swipe or use the arrows. Tap a tile to flip it.</p>
+
+    {% assign tiles = site.tiles | sort: "path" %}
+    {% if tiles.size == 0 %}
+      <p class="empty">No tiles yet. Add a file to the <code>_tiles</code> folder.</p>
+    {% else %}
+    <div class="carousel">
+      <button type="button" class="nav prev" aria-label="Previous tile" disabled>&#8249;</button>
+
+      <div class="track" id="track" tabindex="-1">
+        {% for tile in tiles %}
+        <article class="tile" role="button" tabindex="0" aria-pressed="false">
+          <div class="face front">
+            {% if tile.image %}
+            <img src="{{ tile.image | relative_url }}" alt="{{ tile.image_alt | default: '' }}" loading="lazy" draggable="false">
+            {% endif %}
+            <div class="front-text">
+              <h2>{{ tile.title }}</h2>
+              {% if tile.subtitle %}<p>{{ tile.subtitle }}</p>{% endif %}
+            </div>
+          </div>
+          <div class="face back">
+            <div class="back-inner">
+              <h2>{{ tile.title }}</h2>
+              {{ tile.content | markdownify }}
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      <button type="button" class="nav next" aria-label="Next tile">&#8250;</button>
+    </div>
+
+    <div class="status">
+      <div class="dots" id="dots"></div>
+      <p class="count" id="count" aria-live="polite"></p>
+    </div>
+    {% endif %}
+  </main>
+
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+</body>
+</html>

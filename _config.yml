@@ -1,0 +1,11 @@
+title: Tile Selection
+description: Swipe through the tiles and tap one to see its back.
+
+collections:
+  tiles:
+    output: false
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
